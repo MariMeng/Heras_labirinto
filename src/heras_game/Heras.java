@@ -91,7 +91,7 @@ public class Heras {
 
     }
 
-    public void randerizar(Graphics g) {
+    public void renderizar(Graphics g) {
 
     }
 

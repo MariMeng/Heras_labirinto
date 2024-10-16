@@ -89,7 +89,7 @@ public class Labirinto {
 	} // fim do construtor labirinto
 
 	// função para randerizar o labirinto/elementos visuais.
-	public void randerizar(Graphics g) {
+	public void renderizar(Graphics g) {
 
 		// desenhado o fundo do jogo, centralizado e de acordo com o tamanho dos blocos
 		g.drawImage(fundo, 0, 0, altura * tamBloco, largura * tamBloco, null);
@@ -124,7 +124,7 @@ public class Labirinto {
 		}
 	}
 
-	public void atualizar() {
+	public void atualizar(int x, int y) {
 
 		// atualiza o frame do cristal (animação)
 		numAnimaCristal++;

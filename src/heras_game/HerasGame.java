@@ -29,17 +29,14 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 				"res/esq1.png",
 				"res/esq2.png",
 				"res/esq3.png",
-				"res/esq4.png",
-				"res/esq5.png"
+				"res/esq4.png"
 		};
 
 		String[] direita = {
-				"res/dir1.png",
-				"res/dir2.png",
-				"res/dir3.png",
-				"res/dir4.png",
-				"res/dir5.png",
-				"res/dir6.png"
+				"res/direita1.png",
+				"res/direita2.png",
+				"res/direita3.png",
+				"res/direita4.png",
 
 		};
 
@@ -142,14 +139,14 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		heras.definindoDirecao(null);
+		heras.definindoDirecao(Vetores.fromKeyEvent(e));
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		heras.definindoDirecao(null);
+		heras.definindoDirecao(Vetores.fromKeyEvent(e));
 		// TODO Auto-generated method stub
 
 	}
@@ -169,10 +166,38 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 
 	// MENU
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Heras");
-		HerasGame game = new HerasGame();
+		int[][] lab2 = {
+				{ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 },
+				{ 5, 0, 3, 0, 0, 0, 0, 1, 0, 0, 1, 0, 4, 0, 0, 3, 5 },
+				{ 5, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 5 },
+				{ 5, 0, 1, 1, 3, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 5 },
+				{ 5, 0, 1, 3, 1, 1, 4, 1, 0, 1, 1, 0, 1, 1, 1, 0, 5 },
+				{ 5, 0, 1, 0, 1, 3, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 5 },
+				{ 5, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 5 },
+				{ 5, 3, 0, 0, 1, 0, 0, 0, 0, 1, 5, 1, 1, 0, 1, 5, 5 },
+				{ 5, 1, 1, 0, 1, 3, 4, 1, 1, 1, 1, 1, 1, 4, 1, 5, 5 },
+				{ 5, 0, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 5 },
+				{ 5, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 5 },
+				{ 5, 0, 1, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 5 },
+				{ 5, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 5 },
+				{ 5, 0, 0, 0, 1, 0, 0, 4, 0, 0, 3, 1, 0, 1, 0, 4, 5 },
+				{ 5, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 5 },
+				{ 5, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 3, 5, 0, 3, 5 },
+				{ 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5 }
+
+		};
+		JFrame frame = new JFrame("Heras"); // criar a janela
+		HerasGame game = new HerasGame(lab2);
 		frame.add(game);
 
+		frame.setSize(LAB_COMPRI * BLOCO_TAM, LAB_LARG * BLOCO_TAM);
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation((screenSize.width - frame.getWidth()) / 2, (screenSize.height - frame.getHeight()) / 2);
+
+		frame.setVisible(true);
 		// TODO Auto-generated method stub
 
 	}
