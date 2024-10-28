@@ -11,15 +11,15 @@ import java.awt.event.KeyListener;
 public class HerasGame extends JPanel implements ActionListener, KeyListener {
 
 	private static final int BLOCO_TAM = 40;
-	private static final int LAB_COMPRI = 17;
+	private static final int LAB_ALT = 17;
 	private static final int LAB_LARG = 17;
 
 	private Labirinto labirinto;
 	private Heras heras;
 	private Image fundo;
 	private JButton start;
-	private JButton som;
-	private JButton moduloPergunta;
+	// private JButton som;
+	// private JButton moduloPergunta;
 	private boolean iniciar;
 	private JPanel tituloPainel;
 
@@ -45,12 +45,12 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 
 		// para carregar a imagem de fundo
 
-		fundo = new ImageIcon("res/fundoMenu").getImage();
+		fundo = new ImageIcon("res/fundoMenu.png").getImage();
 		if (fundo == null) {
 			System.err.println("Erro ao carregar imagem de fundo");
 		}
 
-		if (dimensoes.length != LAB_COMPRI || (LAB_LARG > 0 && dimensoes[0].length != LAB_COMPRI))
+		if (dimensoes.length != LAB_LARG || (LAB_LARG > 0 && dimensoes[0].length != LAB_ALT))
 			throw new IllegalArgumentException("O tamanho do labirinto não corresponde");
 
 		// configuração do painel de título
@@ -60,9 +60,9 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				if (fundo != null) {
-					g.drawImage(fundo, 0, 0, getX(), getY(), this);// desenha o fundo
+					g.drawImage(fundo, 0, 0, getWidth(), getHeight(), this);// desenha o fundo
 				}
-				start.paint(g);
+				// start.paint(g);
 			}
 		};
 
@@ -107,17 +107,17 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 			}
 
 		};
+		gamePainel.setLayout(new BorderLayout());
 
 		// Inicializando labirinto e heras
 		add(tituloPainel, "Titulo");
 		add(gamePainel, "Game");
 
-		labirinto = new Labirinto(LAB_COMPRI, LAB_LARG, BLOCO_TAM, dimensoes);
+		labirinto = new Labirinto(LAB_LARG, LAB_ALT, BLOCO_TAM, dimensoes);
 		heras = new Heras(1, 1, 40, 1, direita, esquerda, 180);
 
 		// Timer para atualizar o jogo:
-
-		Timer timer = new Timer(5, this);
+		Timer timer = new Timer(3, this);
 		timer.start();
 		addKeyListener(this); // adiciona o ouvnte de eventos de teclado ao jogo
 		setFocusable(true); // permite que receba eventos do teclado
@@ -130,6 +130,20 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 		Timer timer = new Timer(2000, this);
 		timer.start();
 		repaint();
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (!iniciar) {
+			if (fundo != null) {
+				g.drawImage(fundo, 0, 0, getX(), getY(), this);
+			} else {
+				g.setColor(Color.BLACK);
+				g.drawString("Erro ao carregar imagem de fundo.", 20, 20);
+
+			}
+		}
 	}
 
 	@Override
@@ -146,7 +160,7 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		heras.definindoDirecao(Vetores.fromKeyEvent(e));
+		heras.pararMovimento(Vetores.fromKeyEvent(e));
 		// TODO Auto-generated method stub
 
 	}
@@ -190,7 +204,7 @@ public class HerasGame extends JPanel implements ActionListener, KeyListener {
 		HerasGame game = new HerasGame(lab2);
 		frame.add(game);
 
-		frame.setSize(LAB_COMPRI * BLOCO_TAM, LAB_LARG * BLOCO_TAM);
+		frame.setSize(LAB_LARG * BLOCO_TAM, LAB_ALT * BLOCO_TAM);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

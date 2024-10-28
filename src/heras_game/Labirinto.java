@@ -1,6 +1,5 @@
 package heras_game;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -12,9 +11,13 @@ import javax.swing.JPanel;
 public class Labirinto {
 
 	// variaveis blocosFantasma
-	private boolean mostrarBlocos; // para verificar se o bloco está ou nçao sendo exibido
+	private static final int CRISTAL_FRAME = 2; // define o intervalo de frames para alternar a visibilidade dos blocos
+												// fanstasmas
+	private static final int INVENCIBILIDADE = 240; // quantidade de aualizações por frame
+
+	private boolean mostrarBlocos = true; // para verificar se o bloco está ou nçao sendo exibido
 	private int tempoBlocoFantasma = 0; // para controlar o tempo em que os blocos ficarão visieis
-	private int blocoFantasmaDelay; // definindo o intervalo de frame
+	private int blocoFantasmaDelay = 60; // definindo o intervalo de frame
 
 	// variaveis abirinto
 	private int labirinto[][]; // definindo a matriz do labirinto
@@ -23,22 +26,20 @@ public class Labirinto {
 
 	// variaveis de imagem
 	private Image fundo;
-	// private Image monstro[];
 	private Image bloco;
 	private Image blocoBorda;
-	private Image blocoFantasma[];
-	private Image cristais[];
+	private Image[] blocoFantasma;
+	private Image[] cristais;
 
 	// variaveis cristais
 	private int contadorCristais; // quantos cristais foram pegos
 	private int cristalFrameIndice = 0; // indice de animação de cristal
 	private int numAnimaCristal = 0; // contador para controlar a animação dos cristais
-	private static final int cristalFramePiscar = 60; // define o intervalo de frames para alternar a visibilidade dos
-														// blocos fanstasmas
-	// private static final int cristalAtualiza = 2; //quantidade de aualizações por
-	// frame
 
-	public Labirinto(int altura, int largura, int tamBloco, int[][] labirintoLayort) {
+	private int invulnerabilidade; // temporadorado de invulnerabilidade
+	private boolean estaInvisivel = false; // estado de invulnerabilidade
+
+	public Labirinto(int largura, int altura, int tamBloco, int[][] labirintoLayort) {
 		this.altura = altura;
 		this.largura = largura;
 		this.tamBloco = tamBloco;
@@ -47,21 +48,21 @@ public class Labirinto {
 		// verificando o tamanho do labirinto
 
 		blocoFantasma = new Image[7]; // inicializando o array dos frames de blcocos fantasmas
-		cristais = new Image[8]; // inicializando o array dos frames de cristais
+		cristais = new Image[7]; // inicializando o array dos frames de cristais
 
 		// inicializando imagens com Toolkit
-		bloco = Toolkit.getDefaultToolkit().getImage("res/");
-		fundo = Toolkit.getDefaultToolkit().getImage("res/");
-		blocoBorda = Toolkit.getDefaultToolkit().getImage("res/");
+		bloco = Toolkit.getDefaultToolkit().getImage("res/bloco101.png");
+		fundo = Toolkit.getDefaultToolkit().getImage("res/fundo11.png");
+		blocoBorda = Toolkit.getDefaultToolkit().getImage("res/bloco102.png");
 
 		// carregando os labirintos com imagens
 
 		for (int i = 0; i < 7; i++) {
-			cristais[i] = Toolkit.getDefaultToolkit().getImage("res/" + (i + 1) + ".png");
+			cristais[i] = Toolkit.getDefaultToolkit().getImage("res/cristal" + (i + 1) + ".png");
 		}
 
-		for (int i = 0; i < 8; i++) {
-			blocoFantasma[i] = Toolkit.getDefaultToolkit().getImage("res/" + (i + 1) + ".png");
+		for (int i = 0; i < 7; i++) {
+			blocoFantasma[i] = Toolkit.getDefaultToolkit().getImage("res/fantasma" + (i + 1) + ".png");
 		}
 
 		// esperando para todas imagens serem carregadas antes de serem usadas com
@@ -76,7 +77,7 @@ public class Labirinto {
 									// todas como parte de um mesmo grupo
 		}
 
-		for (Image f : blocoFantasma) {
+		for (Image f : blocoFantasma) {/////////
 			tracker.addImage(f, 3);
 		}
 
@@ -88,7 +89,7 @@ public class Labirinto {
 
 	} // fim do construtor labirinto
 
-	// função para randerizar o labirinto/elementos visuais.
+	// função para renderizar o labirinto/elementos visuais.
 	public void renderizar(Graphics g) {
 
 		// desenhado o fundo do jogo, centralizado e de acordo com o tamanho dos blocos
@@ -105,58 +106,89 @@ public class Labirinto {
 		// lendo a matriz gerada do labirinto com os blocos e cristais
 		for (int y = 0; y < altura; y++) {
 			for (int x = 0; x < largura; x++) {
-				if (labirinto[y][x] == 1) {
+				if (labirinto[y][x] == 5) {
 					g.drawImage(blocoBorda, x * tamBloco, y * tamBloco, tamBloco, tamBloco, null);
 				}
-				if (labirinto[y][x] == 2) {
+				if (labirinto[y][x] == 1) {
 					g.drawImage(bloco, x * tamBloco, y * tamBloco, tamBloco, tamBloco, null);
 				}
 				if (labirinto[y][x] == 3) {
 					g.drawImage(cristais[cristalFrameIndice], x * tamBloco, y * tamBloco, tamBloco, tamBloco, null);
 				}
 				if (labirinto[y][x] == 4) {
-					g.setColor(new Color(255, 0, 0, 127)); // semi-transparente
-					g.drawImage(blocoFantasma[tempoBlocoFantasma / (tempoBlocoFantasma / 7)], x * tamBloco,
-							y * tamBloco, tamBloco, tamBloco, null);
+					if (labirinto[y][x] == 4) {
+						if (mostrarBlocos) {
+							g.drawImage(blocoFantasma[(tempoBlocoFantasma / (blocoFantasmaDelay / 7)) % 7],
+									x * tamBloco, y * tamBloco, tamBloco, tamBloco, null);
+						}
+					}
+
 				}
 
 			}
 		}
 	}
 
-	public void atualizar(int x, int y) {
+	public void checarColisaoFantasma(int x, int y) {
+		if (x >= 0 && x < largura && y >= 0 && y < altura && labirinto[y][x] == 4 && mostrarBlocos && !estaInvisivel) {
 
-		// atualiza o frame do cristal (animação)
-		numAnimaCristal++;
-		// condição para que se o tempo do frame atual exceder, ele mostra o próximo
-		if (numAnimaCristal >= cristalFramePiscar) {
-			numAnimaCristal = 0;
-			cristalFrameIndice = (cristalFrameIndice + 1) % cristais.length;
+			SistemaPerguntas sistemaPerguntas = new SistemaPerguntas();
+			boolean respostaCorreta = sistemaPerguntas.fazerPergunta();
+
+			if (!respostaCorreta) {
+				// Reiniciar jogo
+				// reiniciarJogo(); // Método que reinicia o jogo se a resposta estiver errada
+			} else {
+				estaInvisivel = true; // Ativar a invulnerabilidade
+				invulnerabilidade = 0; // Reiniciar o temporizador de invulnerabilidade
+			}
+			// Adicionar comportamento adicional aqui, como penalidades ao jogador
 		}
 	}
 
-	// função que vai retornar verdadeiro caso o persosonagem for passar para fora
-	// dos limites ou um bloco
-	// função para contato
+	public void atualizar(int x, int y) {
+		// atualiza o frame do cristal (animação)
+		numAnimaCristal++;
+		// condição para que se o tempo do frame atual exceder, ele mostra o próximo
+		if (numAnimaCristal >= CRISTAL_FRAME) {
+			numAnimaCristal = 0;
+			cristalFrameIndice = (cristalFrameIndice + 1) % cristais.length;
+		}
 
-	public boolean Parede(int x, int y) {
+		if (estaInvisivel) {
+			invulnerabilidade++;
+			if (invulnerabilidade >= INVENCIBILIDADE) {
+				estaInvisivel = false;
+				invulnerabilidade = 0;
+			}
+
+		}
+
+		checarColisaoFantasma(x, y);
+		// fazer o temporizador de tempo de vulnerabilidde depois de ser atacado
+	}
+
+	// Retorna verdadeiro se o personagem estiver saindo dos limites ou se for um
+	// bloco sólido
+
+	public boolean ehParede(int x, int y) {
 		if (x < 0 || x >= largura || y < 0 || y >= altura) {
 			return true;
 		}
 
-		return labirinto[y][x] == 1 || labirinto[y][x] == 2 || labirinto[y][x] == 3 && mostrarBlocos;
+		return labirinto[y][x] == 1 || labirinto[y][x] == 5;
 	}
 
 	public boolean ehUmCristal(int x, int y) {
 		if (x < 0 || x >= largura || y < 0 || y >= altura) {
 			return false;
 		}
-		return labirinto[x][y] == 4;
+		return labirinto[y][x] == 3;
 	}
 
 	public void coletarCristal(int x, int y) {
 		if (ehUmCristal(x, y)) {
-			labirinto[x][y] = 0;
+			labirinto[y][x] = 0;
 			contadorCristais++;
 		}
 	}
