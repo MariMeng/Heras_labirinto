@@ -13,10 +13,11 @@
 
 - **Três Tipos de Perguntas**:
   - **Memorização**: O jogador tem um tempo curto para memorizar fórmulas antes de digitá-las de memória.
+  - ![Captura de tela 2024-10-28 173656](https://github.com/user-attachments/assets/f36cdebc-6529-4ebd-8a3b-2dd78b7b98da)
   - **Múltipla Escolha**: O jogador seleciona a resposta correta entre as opções fornecidas.
+  - ![Captura de tela 2024-10-28 203046](https://github.com/user-attachments/assets/218eb5ed-2fcb-4d9c-ba64-5be5db70d177)
   - **Cálculos**: Aplicação de conceitos algébricos para resolver a resposta correta.
 - **Jogabilidade Engajante**: Colete cristais, evite slimes e responda perguntas para progredir pelos níveis labirínticos.
-- **Feedback no Jogo**: O jogador recebe feedback imediato sobre suas respostas. Respostas corretas permitem continuar, enquanto respostas incorretas resultam em uma pausa no progresso.
 - **Sistema de Ranking**: Incentiva a competição e o aprendizado contínuo.
 
 ## Desenvolvimento do Jogo
