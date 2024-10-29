@@ -2,12 +2,13 @@
 # HERAS: Aprendizado Interativo de Álgebra Linear e Outros Conteúdos Através da Gamificação
 
 **HERAS** é um jogo educacional desenvolvido para tornar o aprendizado de álgebra linear e outros conteúdos mais dinâmico e acessível por meio da gamificação. Inspirado no clássico Pac-Man, HERAS permite que os jogadores naveguem por um labirinto em estilo dungeon, coletem cristais e enfrentem "slimes" que apresentam questões relacionadas a conceitos algébricos. O jogo foi desenvolvido com base em princípios de Programação Orientada a Objetos (POO), garantindo modularidade, flexibilidade e potencial para expansão a outras áreas educacionais.
-![image](https://github.com/user-attachments/assets/de2b6c52-e336-41b9-a790-e6c437a87e89)
+![image](https://github.com/user-attachments/assets/1a5a8569-ebcf-4865-84a5-636eb5dc56a2)
+
 
 ## Objetivos do Projeto
 
 - **Aprendizagem Inovadora**: Introduz uma abordagem gamificada ao ensino tradicional de álgebra linear, tornando o aprendizado mais engajador e intuitivo.
-- **Resolução Interativa de Problemas**: Os jogadores resolvem desafios relacionados à álgebra para avançar, desenvolvendo habilidades de raciocínio lógico e resolução de problemas.
+- **Resolução Interativa de Problemas**: Os jogadores resolvem desafios, desenvolvendo habilidades de raciocínio lógico e resolução de problemas.
 - **Ferramenta Versátil para a Educação**: Adequado tanto para ambientes presenciais quanto para ensino a distância, promovendo uma experiência de aprendizado colaborativa e autônoma.
 
 ## Principais Funcionalidades
